@@ -323,7 +323,10 @@
 
     <script>
         const WEDDING_DATE = new Date(2027, 2, 13);
-        const API_URL = 'https://wedding-prep-galeah.vercel.app/api/tasks';
+        // سيتم تحديث هذا الرابط بعد النشر
+        const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+          ? 'http://localhost:3000/api/tasks'
+          : 'https://wedding-prep-galeah.replit.dev/api/tasks';
         let allTasks = [];
 
         function updateCountdown() {
