@@ -1,0 +1,12 @@
+{
+  "name": "wedding-prep-website",
+  "version": "1.0.0",
+  "description": "موقع تحضيرات زفاف غاليه",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "vercel build"
+  },
+  "keywords": ["wedding", "planning"],
+  "author": "",
+  "license": "ISC"
+}

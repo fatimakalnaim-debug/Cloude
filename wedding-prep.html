@@ -323,7 +323,7 @@
 
     <script>
         const WEDDING_DATE = new Date(2027, 2, 13);
-        const API_URL = 'https://wedding-api-galeah.vercel.app/api';
+        const API_URL = 'https://wedding-prep-galeah.vercel.app/api/tasks';
         let allTasks = [];
 
         function updateCountdown() {
@@ -338,16 +338,14 @@
 
         async function loadTasks() {
             try {
-                const response = await fetch(`${API_URL}/tasks`);
+                const response = await fetch(API_URL);
                 if (response.ok) {
                     allTasks = await response.json();
                 } else {
-                    // في حالة الفشل، استخدم localStorage كبديل
                     const stored = localStorage.getItem('wedding-tasks');
                     allTasks = stored ? JSON.parse(stored) : [];
                 }
             } catch (e) {
-                console.log('استخدام localStorage');
                 const stored = localStorage.getItem('wedding-tasks');
                 allTasks = stored ? JSON.parse(stored) : [];
             }
