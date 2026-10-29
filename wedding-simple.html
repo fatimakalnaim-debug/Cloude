@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحضيرات زفاف غاليه</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Arial';
+            background: linear-gradient(135deg, #fff5f9 0%, #ffe4f0 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #e84b8a;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .countdown {
+            font-size: 1.8em;
+            color: #ff69b4;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        .wedding-date {
+            color: #999;
+            font-size: 1.1em;
+            margin-top: 10px;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h2 {
+            color: #e84b8a;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #333;
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 0.95em;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: inherit;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #ff69b4;
+            box-shadow: 0 0 0 3px rgba(255, 105, 180, 0.1);
+        }
+
+        .btn-add {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #ff69b4 0%, #ff1493 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-add:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 105, 180, 0.3);
+        }
+
+        .tasks-list {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .task-item {
+            background: #f8f9fa;
+            border-right: 4px solid #ff69b4;
+            padding: 15px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+        }
+
+        .task-type {
+            display: inline-block;
+            background: #ff69b4;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .task-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 8px 0;
+            font-size: 0.9em;
+        }
+
+        .detail-label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .task-name {
+            color: #333;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .btn-delete {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.85em;
+            margin-top: 10px;
+        }
+
+        .stats {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .stats h2 {
+            color: #e84b8a;
+            margin-bottom: 20px;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .stat-value {
+            color: #ff69b4;
+            font-weight: bold;
+        }
+
+        .empty-message {
+            text-align: center;
+            color: #999;
+            padding: 20px;
+        }
+
+        .info-box {
+            background: #fff0f5;
+            border: 2px solid #ff69b4;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            color: #333;
+            font-size: 0.95em;
+        }
+
+        .success {
+            color: #4caf50;
+            font-weight: bold;
+            text-align: center;
+            padding: 10px;
+            background: #f1f8f4;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✨ تحضيرات زفاف غاليه ✨</h1>
+            <div class="countdown">
+                <span id="days-remaining">0</span> يوم
+            </div>
+            <div class="countdown-label">متبقي على الزفاف</div>
+            <div class="wedding-date">📅 الجمعة 13 مارس 2027</div>
+        </div>
+
+        <div class="content">
+            <div class="card">
+                <h2>📝 إضافة مهمة جديدة</h2>
+
+                <div class="info-box">
+                    ✅ البيانات مشتركة - كل من يدخل الموقع يشوف نفس المهام!
+                </div>
+
+                <div class="success" id="success-msg">✓ تمت الإضافة بنجاح!</div>
+
+                <form id="task-form">
+                    <div class="form-group">
+                        <label for="task-type">نوع المهمة *</label>
+                        <input type="text" id="task-type" placeholder="مثال: حجز الصبابة" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="task-name">التفاصيل *</label>
+                        <input type="text" id="task-name" placeholder="مثال: استوديو براق" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="task-price">السعر (ريال)</label>
+                        <input type="number" id="task-price" placeholder="0" step="0.01">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="task-deposit">العربون (ريال)</label>
+                        <input type="number" id="task-deposit" placeholder="0" step="0.01">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="task-person">اسم المسؤول *</label>
+                        <input type="text" id="task-person" placeholder="من المسؤول؟" required>
+                    </div>
+
+                    <button type="submit" class="btn-add">➕ إضافة المهمة</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h2>📋 قائمة المهام</h2>
+                <div id="tasks-container" class="tasks-list">
+                    <div class="empty-message">جاري التحميل...</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats">
+            <h2>📊 ملخص الميزانية</h2>
+            <div class="stat-row">
+                <span>إجمالي المهام:</span>
+                <span class="stat-value" id="total-tasks">0</span>
+            </div>
+            <div class="stat-row">
+                <span>إجمالي التكاليف:</span>
+                <span class="stat-value" id="total-price">0 ريال</span>
+            </div>
+            <div class="stat-row">
+                <span>إجمالي العربون:</span>
+                <span class="stat-value" id="total-deposit">0 ريال</span>
+            </div>
+            <div class="stat-row">
+                <span>المتبقي للدفع:</span>
+                <span class="stat-value" id="remaining-payment">0 ريال</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const WEDDING_DATE = new Date(2027, 2, 13);
+        const BIN_ID = 'wedding_galeah_2027'; // معرف فريد للبيانات
+        const API_URL = `https://jsonbin.io/v3/b/${BIN_ID}`;
+        const API_KEY = 'YOUR_JSONBIN_KEY'; // سيتم تحديثه
+        let allTasks = [];
+
+        async function loadTasks() {
+            try {
+                const response = await fetch(API_URL, {
+                    headers: { 'X-Access-Key': API_KEY }
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    allTasks = data.record.tasks || [];
+                } else {
+                    allTasks = [];
+                }
+            } catch (e) {
+                console.log('خطأ في التحميل، استخدام البيانات المحلية');
+                allTasks = [];
+            }
+            displayTasks();
+        }
+
+        async function saveTasks() {
+            try {
+                await fetch(API_URL, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Access-Key': API_KEY
+                    },
+                    body: JSON.stringify({ tasks: allTasks })
+                });
+            } catch (e) {
+                console.log('خطأ في الحفظ');
+            }
+        }
+
+        function updateCountdown() {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const weddingDate = new Date(WEDDING_DATE);
+            weddingDate.setHours(0, 0, 0, 0);
+
+            const daysLeft = Math.ceil((weddingDate - today) / (1000 * 60 * 60 * 24));
+            document.getElementById('days-remaining').textContent = Math.max(0, daysLeft);
+        }
+
+        function displayTasks() {
+            const container = document.getElementById('tasks-container');
+
+            if (allTasks.length === 0) {
+                container.innerHTML = '<div class="empty-message">لا توجد مهام حتى الآن</div>';
+            } else {
+                container.innerHTML = allTasks.map((task, index) => `
+                    <div class="task-item">
+                        <span class="task-type">${task.type}</span>
+                        <div class="task-name">${task.name}</div>
+                        <div class="task-details">
+                            <div><span class="detail-label">💰 السعر:</span> ${task.price} ريال</div>
+                            <div><span class="detail-label">🏦 العربون:</span> ${task.deposit} ريال</div>
+                            <div><span class="detail-label">👤 المسؤول:</span> ${task.person}</div>
+                        </div>
+                        <button class="btn-delete" onclick="deleteTask(${index})">حذف</button>
+                    </div>
+                `).join('');
+            }
+
+            updateStats();
+        }
+
+        window.deleteTask = function(index) {
+            if (confirm('حذف هذه المهمة؟')) {
+                allTasks.splice(index, 1);
+                saveTasks();
+                displayTasks();
+            }
+        };
+
+        function updateStats() {
+            const totalTasks = allTasks.length;
+            const totalPrice = allTasks.reduce((sum, task) => sum + (task.price || 0), 0);
+            const totalDeposit = allTasks.reduce((sum, task) => sum + (task.deposit || 0), 0);
+            const remainingPayment = totalPrice - totalDeposit;
+
+            document.getElementById('total-tasks').textContent = totalTasks;
+            document.getElementById('total-price').textContent = totalPrice.toFixed(0) + ' ريال';
+            document.getElementById('total-deposit').textContent = totalDeposit.toFixed(0) + ' ريال';
+            document.getElementById('remaining-payment').textContent = Math.max(0, remainingPayment).toFixed(0) + ' ريال';
+        }
+
+        document.getElementById('task-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const task = {
+                type: document.getElementById('task-type').value,
+                name: document.getElementById('task-name').value,
+                price: parseFloat(document.getElementById('task-price').value) || 0,
+                deposit: parseFloat(document.getElementById('task-deposit').value) || 0,
+                person: document.getElementById('task-person').value
+            };
+
+            allTasks.push(task);
+            await saveTasks();
+
+            document.getElementById('task-form').reset();
+            const msg = document.getElementById('success-msg');
+            msg.style.display = 'block';
+            setTimeout(() => { msg.style.display = 'none'; }, 2000);
+
+            displayTasks();
+        });
+
+        updateCountdown();
+        loadTasks();
+
+        // تحديث البيانات كل 3 ثواني
+        setInterval(loadTasks, 3000);
+        setInterval(updateCountdown, 1000 * 60 * 60);
+    </script>
+</body>
+</html>
