@@ -94,8 +94,7 @@
             font-size: 0.95em;
         }
 
-        .form-group input,
-        .form-group select {
+        .form-group input {
             width: 100%;
             padding: 12px;
             border: 2px solid #e0e0e0;
@@ -105,8 +104,7 @@
             transition: border-color 0.3s;
         }
 
-        .form-group input:focus,
-        .form-group select:focus {
+        .form-group input:focus {
             outline: none;
             border-color: #ff69b4;
             box-shadow: 0 0 0 3px rgba(255, 105, 180, 0.1);
@@ -170,10 +168,6 @@
             gap: 10px;
             margin: 8px 0;
             font-size: 0.9em;
-        }
-
-        .detail-item {
-            color: #666;
         }
 
         .detail-label {
@@ -245,13 +239,11 @@
             font-style: italic;
         }
 
-        .task-types {
-            background: #ffe4f0;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            font-size: 0.9em;
-            color: #666;
+        .loading {
+            text-align: center;
+            color: #ff69b4;
+            padding: 20px;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -269,11 +261,6 @@
         <div class="content">
             <div class="card">
                 <h2>📝 إضافة مهمة جديدة</h2>
-
-                <div class="task-types">
-                    <strong>أنواع المهام:</strong><br>
-                    حجز الصبابة، حجز العشاء، حجز الميك أب، حجز الفستان، الدعوات، الزينة، التصوير، الموسيقى
-                </div>
 
                 <form id="task-form">
                     <div class="form-group">
@@ -308,7 +295,7 @@
             <div class="card">
                 <h2>📋 قائمة المهام</h2>
                 <div id="tasks-container" class="tasks-list">
-                    <div class="empty-message">لا توجد مهام حتى الآن</div>
+                    <div class="loading">جاري التحميل...</div>
                 </div>
             </div>
         </div>
@@ -335,10 +322,10 @@
     </div>
 
     <script>
-        const WEDDING_DATE = new Date(2027, 2, 13); // 13 مارس 2027
-        const STORAGE_KEY = 'wedding-tasks';
+        const WEDDING_DATE = new Date(2027, 2, 13);
+        const API_URL = 'https://wedding-api-galeah.vercel.app/api';
+        let allTasks = [];
 
-        // تحديث العداد
         function updateCountdown() {
             const today = new Date();
             today.setHours(0, 0, 0, 0);
@@ -349,26 +336,31 @@
             document.getElementById('days-remaining').textContent = Math.max(0, daysLeft);
         }
 
-        // تحميل المهام من localStorage
-        function loadTasks() {
-            const stored = localStorage.getItem(STORAGE_KEY);
-            return stored ? JSON.parse(stored) : [];
+        async function loadTasks() {
+            try {
+                const response = await fetch(`${API_URL}/tasks`);
+                if (response.ok) {
+                    allTasks = await response.json();
+                } else {
+                    // في حالة الفشل، استخدم localStorage كبديل
+                    const stored = localStorage.getItem('wedding-tasks');
+                    allTasks = stored ? JSON.parse(stored) : [];
+                }
+            } catch (e) {
+                console.log('استخدام localStorage');
+                const stored = localStorage.getItem('wedding-tasks');
+                allTasks = stored ? JSON.parse(stored) : [];
+            }
+            displayTasks();
         }
 
-        // حفظ المهام في localStorage
-        function saveTasks(tasks) {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
-        }
-
-        // عرض المهام
         function displayTasks() {
-            const tasks = loadTasks();
             const container = document.getElementById('tasks-container');
 
-            if (tasks.length === 0) {
+            if (allTasks.length === 0) {
                 container.innerHTML = '<div class="empty-message">لا توجد مهام حتى الآن</div>';
             } else {
-                container.innerHTML = tasks.map((task, index) => `
+                container.innerHTML = allTasks.map((task, index) => `
                     <div class="task-item">
                         <span class="task-type">${task.type}</span>
                         <div class="task-name">${task.name}</div>
@@ -391,8 +383,7 @@
             updateStats();
         }
 
-        // إضافة مهمة
-        function addTask(e) {
+        async function addTask(e) {
             e.preventDefault();
 
             const task = {
@@ -403,32 +394,44 @@
                 person: document.getElementById('task-person').value
             };
 
-            const tasks = loadTasks();
-            tasks.push(task);
-            saveTasks(tasks);
+            try {
+                const response = await fetch(`${API_URL}/tasks`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(task)
+                });
 
-            // مسح النموذج
+                if (response.ok) {
+                    allTasks.push(task);
+                }
+            } catch (e) {
+                allTasks.push(task);
+            }
+
+            // حفظ محلي كبديل
+            localStorage.setItem('wedding-tasks', JSON.stringify(allTasks));
             document.getElementById('task-form').reset();
             displayTasks();
         }
 
-        // حذف مهمة
-        function deleteTask(index) {
+        async function deleteTask(index) {
             if (confirm('هل أنت متأكد من حذف هذه المهمة؟')) {
-                const tasks = loadTasks();
-                tasks.splice(index, 1);
-                saveTasks(tasks);
+                const taskId = index;
+
+                try {
+                    await fetch(`${API_URL}/tasks/${taskId}`, { method: 'DELETE' });
+                } catch (e) {}
+
+                allTasks.splice(index, 1);
+                localStorage.setItem('wedding-tasks', JSON.stringify(allTasks));
                 displayTasks();
             }
         }
 
-        // تحديث الإحصائيات
         function updateStats() {
-            const tasks = loadTasks();
-
-            const totalTasks = tasks.length;
-            const totalPrice = tasks.reduce((sum, task) => sum + task.price, 0);
-            const totalDeposit = tasks.reduce((sum, task) => sum + task.deposit, 0);
+            const totalTasks = allTasks.length;
+            const totalPrice = allTasks.reduce((sum, task) => sum + task.price, 0);
+            const totalDeposit = allTasks.reduce((sum, task) => sum + task.deposit, 0);
             const remainingPayment = totalPrice - totalDeposit;
 
             document.getElementById('total-tasks').textContent = totalTasks;
@@ -437,14 +440,14 @@
             document.getElementById('remaining-payment').textContent = Math.max(0, remainingPayment).toFixed(0) + ' ريال';
         }
 
-        // ربط النموذج
         document.getElementById('task-form').addEventListener('submit', addTask);
 
-        // تهيئة الصفحة
         updateCountdown();
-        displayTasks();
+        loadTasks();
 
-        // تحديث العداد كل يوم
+        // تحديث البيانات كل 5 ثواني من الخادم
+        setInterval(loadTasks, 5000);
+
         setInterval(updateCountdown, 1000 * 60 * 60);
     </script>
 </body>
