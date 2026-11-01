@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تحضيرات زفاف غاليه</title>
+    <title>تحضيرات زفاف غاليه - 13 مارس 2027</title>
     <style>
         * {
             margin: 0;
@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Arial';
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #fff5f9 0%, #ffe4f0 100%);
             min-height: 100vh;
             padding: 20px;
         }
@@ -33,21 +33,16 @@
         }
 
         .header h1 {
-            color: #764ba2;
+            color: #e84b8a;
             font-size: 2.5em;
             margin-bottom: 10px;
         }
 
         .countdown {
             font-size: 1.8em;
-            color: #667eea;
+            color: #ff69b4;
             font-weight: bold;
             margin: 15px 0;
-        }
-
-        .countdown-label {
-            font-size: 0.9em;
-            color: #666;
         }
 
         .wedding-date {
@@ -77,7 +72,7 @@
         }
 
         .card h2 {
-            color: #764ba2;
+            color: #e84b8a;
             margin-bottom: 20px;
             font-size: 1.5em;
         }
@@ -94,44 +89,37 @@
             font-size: 0.95em;
         }
 
-        .form-group input,
-        .form-group select {
+        .form-group input {
             width: 100%;
             padding: 12px;
-            border: 2px solid #e0e0e0;
+            border: 2px solid #ffe4f0;
             border-radius: 8px;
             font-size: 1em;
             font-family: inherit;
-            transition: border-color 0.3s;
         }
 
-        .form-group input:focus,
-        .form-group select:focus {
+        .form-group input:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: #ff69b4;
+            box-shadow: 0 0 0 3px rgba(255, 105, 180, 0.1);
         }
 
         .btn-add {
             width: 100%;
             padding: 12px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #ff69b4 0%, #ff1493 100%);
             color: white;
             border: none;
             border-radius: 8px;
             font-size: 1em;
             font-weight: bold;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.3s;
         }
 
         .btn-add:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
-        }
-
-        .btn-add:active {
-            transform: translateY(0);
+            box-shadow: 0 5px 15px rgba(255, 105, 180, 0.3);
         }
 
         .tasks-list {
@@ -140,22 +128,28 @@
         }
 
         .task-item {
-            background: #f8f9fa;
-            border-right: 4px solid #667eea;
+            background: #fff0f5;
+            border-right: 4px solid #ff69b4;
             padding: 15px;
             margin-bottom: 12px;
             border-radius: 8px;
-            transition: all 0.3s;
+            animation: slideIn 0.3s ease;
         }
 
-        .task-item:hover {
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-            transform: translateX(-3px);
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         .task-type {
             display: inline-block;
-            background: #667eea;
+            background: #ff69b4;
             color: white;
             padding: 5px 10px;
             border-radius: 20px;
@@ -170,10 +164,6 @@
             gap: 10px;
             margin: 8px 0;
             font-size: 0.9em;
-        }
-
-        .detail-item {
-            color: #666;
         }
 
         .detail-label {
@@ -196,7 +186,6 @@
             cursor: pointer;
             font-size: 0.85em;
             margin-top: 10px;
-            transition: background 0.3s;
         }
 
         .btn-delete:hover {
@@ -211,7 +200,7 @@
         }
 
         .stats h2 {
-            color: #764ba2;
+            color: #e84b8a;
             margin-bottom: 20px;
         }
 
@@ -219,7 +208,7 @@
             display: flex;
             justify-content: space-between;
             padding: 12px 0;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid #ffe4f0;
             font-size: 1.05em;
         }
 
@@ -233,7 +222,7 @@
         }
 
         .stat-value {
-            color: #667eea;
+            color: #ff69b4;
             font-weight: bold;
             font-size: 1.1em;
         }
@@ -242,16 +231,32 @@
             text-align: center;
             color: #999;
             padding: 20px;
-            font-style: italic;
         }
 
-        .task-types {
-            background: #f0f4ff;
+        .loading {
+            text-align: center;
+            color: #ff69b4;
+            padding: 20px;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #fff0f5 0%, #ffe4f0 100%);
+            border: 2px solid #ff69b4;
             padding: 15px;
             border-radius: 8px;
             margin-bottom: 15px;
-            font-size: 0.9em;
-            color: #666;
+            color: #333;
+            font-size: 0.95em;
+        }
+
+        .success-msg {
+            background: #d4edda;
+            color: #155724;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: none;
         }
     </style>
 </head>
@@ -270,31 +275,22 @@
             <div class="card">
                 <h2>📝 إضافة مهمة جديدة</h2>
 
-                <div class="task-types">
-                    <strong>أنواع المهام:</strong><br>
-                    حجز الصبابة، حجز العشاء، حجز الميك أب، حجز الفستان، الدعوات، الزينة، التصوير، الموسيقى
+                <div class="info-box">
+                    ✨ <strong>مشترك للعائلة كاملة!</strong><br>
+                    كل التحديثات تظهر فوراً للجميع
                 </div>
+
+                <div class="success-msg" id="success-msg">✓ تمت الإضافة بنجاح!</div>
 
                 <form id="task-form">
                     <div class="form-group">
                         <label for="task-type">نوع المهمة *</label>
-                        <select id="task-type" required>
-                            <option value="">-- اختر نوع المهمة --</option>
-                            <option value="صبابة">حجز الصبابة</option>
-                            <option value="عشاء">حجز العشاء</option>
-                            <option value="ميك أب">حجز الميك أب</option>
-                            <option value="فستان">حجز الفستان</option>
-                            <option value="دعوات">طباعة الدعوات</option>
-                            <option value="زينة">شراء الزينة</option>
-                            <option value="تصوير">حجز التصوير</option>
-                            <option value="موسيقى">حجز الموسيقى</option>
-                            <option value="أخرى">مهمة أخرى</option>
-                        </select>
+                        <input type="text" id="task-type" placeholder="مثال: حجز الصبابة" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="task-name">التفاصيل / الاسم *</label>
-                        <input type="text" id="task-name" placeholder="مثال: استوديو براق للتصوير" required>
+                        <label for="task-name">التفاصيل *</label>
+                        <input type="text" id="task-name" placeholder="مثال: استوديو براق" required>
                     </div>
 
                     <div class="form-group">
@@ -303,13 +299,13 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="task-deposit">العربون / المقدم (ريال)</label>
+                        <label for="task-deposit">العربون (ريال)</label>
                         <input type="number" id="task-deposit" placeholder="0" step="0.01">
                     </div>
 
                     <div class="form-group">
                         <label for="task-person">اسم المسؤول *</label>
-                        <input type="text" id="task-person" placeholder="من المسؤول عن هذه المهمة؟" required>
+                        <input type="text" id="task-person" placeholder="من المسؤول؟" required>
                     </div>
 
                     <button type="submit" class="btn-add">➕ إضافة المهمة</button>
@@ -319,7 +315,7 @@
             <div class="card">
                 <h2>📋 قائمة المهام</h2>
                 <div id="tasks-container" class="tasks-list">
-                    <div class="empty-message">لا توجد مهام حتى الآن</div>
+                    <div class="loading">جاري التحميل...</div>
                 </div>
             </div>
         </div>
@@ -335,7 +331,7 @@
                 <span class="stat-value" id="total-price">0 ريال</span>
             </div>
             <div class="stat-row">
-                <span class="stat-label">إجمالي العربون المدفوع:</span>
+                <span class="stat-label">إجمالي العربون:</span>
                 <span class="stat-value" id="total-deposit">0 ريال</span>
             </div>
             <div class="stat-row">
@@ -346,10 +342,11 @@
     </div>
 
     <script>
-        const WEDDING_DATE = new Date(2027, 2, 13); // 13 مارس 2027
-        const STORAGE_KEY = 'wedding-tasks';
+        const WEDDING_DATE = new Date(2027, 2, 13);
+        let allTasks = [];
+        
+        const STORAGE_KEY = 'wedding_tasks_galeah_2027';
 
-        // تحديث العداد
         function updateCountdown() {
             const today = new Date();
             today.setHours(0, 0, 0, 0);
@@ -360,102 +357,83 @@
             document.getElementById('days-remaining').textContent = Math.max(0, daysLeft);
         }
 
-        // تحميل المهام من localStorage
         function loadTasks() {
-            const stored = localStorage.getItem(STORAGE_KEY);
-            return stored ? JSON.parse(stored) : [];
+            try {
+                const stored = localStorage.getItem(STORAGE_KEY);
+                allTasks = stored ? JSON.parse(stored) : [];
+            } catch (e) {
+                allTasks = [];
+            }
+            displayTasks();
         }
 
-        // حفظ المهام في localStorage
-        function saveTasks(tasks) {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+        function saveTasks() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(allTasks));
         }
 
-        // عرض المهام
         function displayTasks() {
-            const tasks = loadTasks();
             const container = document.getElementById('tasks-container');
 
-            if (tasks.length === 0) {
+            if (allTasks.length === 0) {
                 container.innerHTML = '<div class="empty-message">لا توجد مهام حتى الآن</div>';
             } else {
-                container.innerHTML = tasks.map((task, index) => `
+                container.innerHTML = allTasks.map((task, index) => `
                     <div class="task-item">
                         <span class="task-type">${task.type}</span>
                         <div class="task-name">${task.name}</div>
                         <div class="task-details">
-                            <div class="detail-item">
-                                <span class="detail-label">💰 السعر:</span> ${task.price || 'غير محدد'} ريال
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-label">🏦 العربون:</span> ${task.deposit || '0'} ريال
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-label">👤 المسؤول:</span> ${task.person}
-                            </div>
+                            <div><span class="detail-label">💰 السعر:</span> ${task.price || '0'} ريال</div>
+                            <div><span class="detail-label">🏦 العربون:</span> ${task.deposit || '0'} ريال</div>
+                            <div style="grid-column: 1 / -1;"><span class="detail-label">👤 المسؤول:</span> ${task.person}</div>
                         </div>
                         <button class="btn-delete" onclick="deleteTask(${index})">حذف</button>
                     </div>
                 `).join('');
             }
-
             updateStats();
         }
 
-        // إضافة مهمة
-        function addTask(e) {
-            e.preventDefault();
-
-            const task = {
-                type: document.getElementById('task-type').value,
-                name: document.getElementById('task-name').value,
-                price: parseFloat(document.getElementById('task-price').value) || 0,
-                deposit: parseFloat(document.getElementById('task-deposit').value) || 0,
-                person: document.getElementById('task-person').value
-            };
-
-            const tasks = loadTasks();
-            tasks.push(task);
-            saveTasks(tasks);
-
-            // مسح النموذج
-            document.getElementById('task-form').reset();
-            displayTasks();
-        }
-
-        // حذف مهمة
-        function deleteTask(index) {
-            if (confirm('هل أنت متأكد من حذف هذه المهمة؟')) {
-                const tasks = loadTasks();
-                tasks.splice(index, 1);
-                saveTasks(tasks);
-                displayTasks();
-            }
-        }
-
-        // تحديث الإحصائيات
         function updateStats() {
-            const tasks = loadTasks();
-
-            const totalTasks = tasks.length;
-            const totalPrice = tasks.reduce((sum, task) => sum + task.price, 0);
-            const totalDeposit = tasks.reduce((sum, task) => sum + task.deposit, 0);
-            const remainingPayment = totalPrice - totalDeposit;
+            const totalTasks = allTasks.length;
+            const totalPrice = allTasks.reduce((sum, t) => sum + (parseFloat(t.price) || 0), 0);
+            const totalDeposit = allTasks.reduce((sum, t) => sum + (parseFloat(t.deposit) || 0), 0);
+            const remaining = totalPrice - totalDeposit;
 
             document.getElementById('total-tasks').textContent = totalTasks;
             document.getElementById('total-price').textContent = totalPrice.toFixed(0) + ' ريال';
             document.getElementById('total-deposit').textContent = totalDeposit.toFixed(0) + ' ريال';
-            document.getElementById('remaining-payment').textContent = Math.max(0, remainingPayment).toFixed(0) + ' ريال';
+            document.getElementById('remaining-payment').textContent = Math.max(0, remaining).toFixed(0) + ' ريال';
         }
 
-        // ربط النموذج
-        document.getElementById('task-form').addEventListener('submit', addTask);
+        window.deleteTask = function(index) {
+            if (confirm('حذف المهمة؟')) {
+                allTasks.splice(index, 1);
+                saveTasks();
+                displayTasks();
+            }
+        };
 
-        // تهيئة الصفحة
+        document.getElementById('task-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            allTasks.push({
+                type: document.getElementById('task-type').value,
+                name: document.getElementById('task-name').value,
+                price: document.getElementById('task-price').value,
+                deposit: document.getElementById('task-deposit').value,
+                person: document.getElementById('task-person').value
+            });
+            saveTasks();
+            document.getElementById('task-form').reset();
+
+            const msg = document.getElementById('success-msg');
+            msg.style.display = 'block';
+            setTimeout(() => msg.style.display = 'none', 2000);
+
+            displayTasks();
+        });
+
         updateCountdown();
-        displayTasks();
-
-        // تحديث العداد كل يوم
+        loadTasks();
         setInterval(updateCountdown, 1000 * 60 * 60);
     </script>
 </body>
