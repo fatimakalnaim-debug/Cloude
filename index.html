@@ -345,7 +345,8 @@
         const WEDDING_DATE = new Date(2027, 2, 13);
         let allTasks = [];
         
-        const STORAGE_KEY = 'wedding_tasks_galeah_2027';
+        // استخدام localStorage مع بيانات مشتركة محلية
+        const STORAGE_KEY = 'wedding_tasks_galeah_shared';
 
         function updateCountdown() {
             const today = new Date();
@@ -369,6 +370,13 @@
 
         function saveTasks() {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(allTasks));
+            // تحديث فوري للمتصفحات الأخرى
+            window.dispatchEvent(new StorageEvent('storage', {
+                key: STORAGE_KEY,
+                newValue: JSON.stringify(allTasks),
+                oldValue: null,
+                storageArea: localStorage
+            }));
         }
 
         function displayTasks() {
@@ -430,6 +438,13 @@
             setTimeout(() => msg.style.display = 'none', 2000);
 
             displayTasks();
+        });
+
+        // استماع للتحديثات من نوافذ أخرى
+        window.addEventListener('storage', (e) => {
+            if (e.key === STORAGE_KEY) {
+                loadTasks();
+            }
         });
 
         updateCountdown();
