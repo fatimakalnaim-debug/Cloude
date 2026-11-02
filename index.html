@@ -345,8 +345,12 @@
         const WEDDING_DATE = new Date(2027, 2, 13);
         let allTasks = [];
         
-        // استخدام localStorage مع بيانات مشتركة محلية
-        const STORAGE_KEY = 'wedding_tasks_galeah_shared';
+        // Google Sheets API URL - بديل بسيط وآمن
+        const SHEET_URL = 'https://script.google.com/macros/d/1234567890/usercopy';
+        
+        // استخدام Netlify Functions أو API بسيط
+        const API_URL = 'https://jsonbin.io/v3/b/67282d8fe41b4d34e4e6d8c7';
+        const API_KEY = 'YOUR_API_KEY_HERE';
 
         function updateCountdown() {
             const today = new Date();
@@ -358,25 +362,24 @@
             document.getElementById('days-remaining').textContent = Math.max(0, daysLeft);
         }
 
-        function loadTasks() {
+        async function loadTasks() {
             try {
-                const stored = localStorage.getItem(STORAGE_KEY);
-                allTasks = stored ? JSON.parse(stored) : [];
-            } catch (e) {
-                allTasks = [];
-            }
+                // محاولة تحميل من localStorage أولاً
+                const stored = localStorage.getItem('wedding_tasks_backup');
+                if (stored) {
+                    allTasks = JSON.parse(stored);
+                    displayTasks();
+                    return;
+                }
+            } catch (e) {}
+            
             displayTasks();
         }
 
         function saveTasks() {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(allTasks));
-            // تحديث فوري للمتصفحات الأخرى
-            window.dispatchEvent(new StorageEvent('storage', {
-                key: STORAGE_KEY,
-                newValue: JSON.stringify(allTasks),
-                oldValue: null,
-                storageArea: localStorage
-            }));
+            // حفظ في localStorage كبديل
+            localStorage.setItem('wedding_tasks_backup', JSON.stringify(allTasks));
+            // يمكن إضافة حفظ في API هنا لاحقاً
         }
 
         function displayTasks() {
@@ -428,7 +431,8 @@
                 name: document.getElementById('task-name').value,
                 price: document.getElementById('task-price').value,
                 deposit: document.getElementById('task-deposit').value,
-                person: document.getElementById('task-person').value
+                person: document.getElementById('task-person').value,
+                timestamp: new Date().toISOString()
             });
             saveTasks();
             document.getElementById('task-form').reset();
@@ -440,12 +444,10 @@
             displayTasks();
         });
 
-        // استماع للتحديثات من نوافذ أخرى
-        window.addEventListener('storage', (e) => {
-            if (e.key === STORAGE_KEY) {
-                loadTasks();
-            }
-        });
+        // تحديث البيانات كل 3 ثواني
+        setInterval(() => {
+            loadTasks();
+        }, 3000);
 
         updateCountdown();
         loadTasks();
