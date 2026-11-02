@@ -472,19 +472,42 @@
         let editingIndex = -1;
 
         const STORAGE_KEY = 'wedding_tasks_galeah_2027';
+        const JSONBIN_URL = 'https://jsonbin.io/v3/b/67282d8fe41b4d34e4e6d8c7';
+        const JSONBIN_KEY = '$2b$10$FQrDH8k8k8k8k8k8k8k8k';
 
-        function loadTasks() {
+        async function loadTasks() {
             try {
+                const response = await fetch(JSONBIN_URL, {
+                    headers: { 'X-Master-Key': JSONBIN_KEY }
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    allTasks = data.record.tasks || [];
+                } else {
+                    const stored = localStorage.getItem(STORAGE_KEY);
+                    allTasks = stored ? JSON.parse(stored) : [];
+                }
+            } catch (e) {
                 const stored = localStorage.getItem(STORAGE_KEY);
                 allTasks = stored ? JSON.parse(stored) : [];
-            } catch (e) {
-                allTasks = [];
             }
             displayTasks();
         }
 
-        function saveTasks() {
+        async function saveTasks() {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(allTasks));
+            try {
+                await fetch(JSONBIN_URL, {
+                    method: 'PUT',
+                    headers: {
+                        'X-Master-Key': JSONBIN_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ tasks: allTasks })
+                });
+            } catch (e) {
+                console.log('تحديث السحابة: يتم الحفظ محلياً');
+            }
         }
 
         window.openEditModal = function(index) {
@@ -503,7 +526,7 @@
             editingIndex = -1;
         };
 
-        document.getElementById('edit-form').addEventListener('submit', (e) => {
+        document.getElementById('edit-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             if (editingIndex >= 0) {
                 allTasks[editingIndex] = {
@@ -513,7 +536,7 @@
                     deposit: document.getElementById('edit-deposit').value,
                     person: document.getElementById('edit-person').value
                 };
-                saveTasks();
+                await saveTasks();
                 displayTasks();
                 closeEditModal();
             }
@@ -566,15 +589,15 @@
             document.getElementById('remaining-payment').textContent = Math.max(0, remaining).toFixed(0) + ' ريال';
         }
 
-        window.deleteTask = function(index) {
+        window.deleteTask = async function(index) {
             if (confirm('حذف المهمة؟')) {
                 allTasks.splice(index, 1);
-                saveTasks();
+                await saveTasks();
                 displayTasks();
             }
         };
 
-        document.getElementById('task-form').addEventListener('submit', (e) => {
+        document.getElementById('task-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             allTasks.push({
                 type: document.getElementById('task-type').value,
@@ -583,7 +606,7 @@
                 deposit: document.getElementById('task-deposit').value,
                 person: document.getElementById('task-person').value
             });
-            saveTasks();
+            await saveTasks();
             document.getElementById('task-form').reset();
 
             const msg = document.getElementById('success-msg');
@@ -595,6 +618,7 @@
 
         updateCountdown();
         loadTasks();
+        setInterval(loadTasks, 2000);
         setInterval(updateCountdown, 1000 * 60 * 60);
     </script>
 </body>
