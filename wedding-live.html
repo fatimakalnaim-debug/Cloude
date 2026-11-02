@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحضيرات زفاف غاليه - 13 مارس 2027</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, sans-serif; background: linear-gradient(135deg, #fff5f9 0%, #ffe4f0 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { background: white; border-radius: 15px; padding: 30px; margin-bottom: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; }
+        .header h1 { color: #e84b8a; font-size: 2.5em; margin-bottom: 10px; }
+        .countdown { font-size: 1.8em; color: #ff69b4; font-weight: bold; margin: 15px 0; }
+        .wedding-date { color: #999; font-size: 1.1em; margin-top: 10px; }
+        .content { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px; }
+        @media (max-width: 768px) { .content { grid-template-columns: 1fr; } }
+        .card { background: white; border-radius: 15px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .card h2 { color: #e84b8a; margin-bottom: 20px; font-size: 1.5em; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; color: #333; font-weight: bold; margin-bottom: 5px; }
+        .form-group input { width: 100%; padding: 12px; border: 2px solid #ffe4f0; border-radius: 8px; font-size: 1em; }
+        .form-group input:focus { outline: none; border-color: #ff69b4; box-shadow: 0 0 0 3px rgba(255,105,180,0.1); }
+        .btn-add { width: 100%; padding: 12px; background: linear-gradient(135deg, #ff69b4 0%, #ff1493 100%); color: white; border: none; border-radius: 8px; font-size: 1em; font-weight: bold; cursor: pointer; }
+        .btn-add:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255,105,180,0.3); }
+        .tasks-list { max-height: 600px; overflow-y: auto; }
+        .task-item { background: #fff0f5; border-right: 4px solid #ff69b4; padding: 15px; margin-bottom: 12px; border-radius: 8px; animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+        .task-type { display: inline-block; background: #ff69b4; color: white; padding: 5px 10px; border-radius: 20px; font-size: 0.85em; font-weight: bold; margin-bottom: 8px; }
+        .task-details { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 8px 0; font-size: 0.9em; }
+        .detail-label { font-weight: bold; color: #333; }
+        .task-name { color: #333; font-weight: bold; margin-bottom: 8px; }
+        .task-buttons { display: flex; gap: 8px; margin-top: 10px; }
+        .btn-edit { background: #4a90e2; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 0.85em; }
+        .btn-edit:hover { background: #357abd; }
+        .btn-delete { background: #ff6b6b; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 0.85em; }
+        .btn-delete:hover { background: #ff5252; }
+        .stats { background: white; border-radius: 15px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .stats h2 { color: #e84b8a; margin-bottom: 20px; }
+        .stat-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #ffe4f0; }
+        .stat-row:last-child { border-bottom: none; }
+        .stat-label { color: #666; font-weight: 500; }
+        .stat-value { color: #ff69b4; font-weight: bold; font-size: 1.1em; }
+        .empty-message { text-align: center; color: #999; padding: 20px; }
+        .loading { text-align: center; color: #ff69b4; padding: 20px; font-weight: bold; }
+        .info-box { background: linear-gradient(135deg, #fff0f5 0%, #ffe4f0 100%); border: 2px solid #ff69b4; padding: 15px; border-radius: 8px; margin-bottom: 15px; color: #333; font-size: 0.95em; }
+        .success-msg { background: #d4edda; color: #155724; padding: 10px 15px; border-radius: 5px; margin-bottom: 10px; display: none; }
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.4); }
+        .modal.active { display: flex; justify-content: center; align-items: center; }
+        .modal-content { background-color: white; padding: 30px; border-radius: 15px; max-width: 500px; width: 90%; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+        .modal-header { font-size: 1.5em; color: #e84b8a; margin-bottom: 20px; font-weight: bold; }
+        .modal-buttons { display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end; }
+        .btn-save { background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%); color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .btn-cancel { background: #999; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
+        .status { position: fixed; bottom: 20px; right: 20px; background: #4caf50; color: white; padding: 10px 20px; border-radius: 20px; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <div id="status" class="status">متزامن ✓</div>
+    <div class="container">
+        <div class="header">
+            <h1>✨ تحضيرات زفاف غاليه ✨</h1>
+            <div class="countdown"><span id="days-remaining">0</span> يوم</div>
+            <div class="wedding-date">📅 الجمعة 13 مارس 2027</div>
+        </div>
+        <div class="content">
+            <div class="card">
+                <h2>📝 إضافة مهمة جديدة</h2>
+                <div class="info-box">✨ <strong>مشترك للعائلة كاملة!</strong><br>كل التحديثات تظهر فوراً للجميع</div>
+                <div class="success-msg" id="success-msg">✓ تمت الإضافة بنجاح!</div>
+                <form id="task-form">
+                    <div class="form-group"><label>نوع المهمة *</label><input type="text" id="task-type" placeholder="مثال: حجز الصبابة" required></div>
+                    <div class="form-group"><label>التفاصيل *</label><input type="text" id="task-name" placeholder="مثال: استوديو براق" required></div>
+                    <div class="form-group"><label>السعر (ريال)</label><input type="number" id="task-price" placeholder="0" step="0.01"></div>
+                    <div class="form-group"><label>العربون (ريال)</label><input type="number" id="task-deposit" placeholder="0" step="0.01"></div>
+                    <div class="form-group"><label>اسم المسؤول *</label><input type="text" id="task-person" placeholder="من المسؤول؟" required></div>
+                    <button type="submit" class="btn-add">➕ إضافة المهمة</button>
+                </form>
+            </div>
+            <div class="card">
+                <h2>📋 قائمة المهام</h2>
+                <div id="tasks-container" class="tasks-list"><div class="loading">جاري التحميل...</div></div>
+            </div>
+        </div>
+        <div class="stats">
+            <h2>📊 ملخص الميزانية</h2>
+            <div class="stat-row"><span class="stat-label">إجمالي المهام:</span><span class="stat-value" id="total-tasks">0</span></div>
+            <div class="stat-row"><span class="stat-label">إجمالي التكاليف:</span><span class="stat-value" id="total-price">0 ريال</span></div>
+            <div class="stat-row"><span class="stat-label">إجمالي العربون:</span><span class="stat-value" id="total-deposit">0 ريال</span></div>
+            <div class="stat-row"><span class="stat-label">المتبقي للدفع:</span><span class="stat-value" id="remaining-payment">0 ريال</span></div>
+        </div>
+    </div>
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">✏️ تعديل المهمة</div>
+            <form id="edit-form">
+                <div class="form-group"><label>نوع المهمة *</label><input type="text" id="edit-type" required></div>
+                <div class="form-group"><label>التفاصيل *</label><input type="text" id="edit-name" required></div>
+                <div class="form-group"><label>السعر (ريال)</label><input type="number" id="edit-price" step="0.01"></div>
+                <div class="form-group"><label>العربون (ريال)</label><input type="number" id="edit-deposit" step="0.01"></div>
+                <div class="form-group"><label>اسم المسؤول *</label><input type="text" id="edit-person" required></div>
+                <div class="modal-buttons"><button type="button" class="btn-cancel" onclick="closeEditModal()">إلغاء</button><button type="submit" class="btn-save">💾 حفظ التعديل</button></div>
+            </form>
+        </div>
+    </div>
+    <script>
+        const JSONBIN_ID = '678a1b2c3d4e5f6g7h8i9j0k';
+        const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_ID}`;
+        const JSONBIN_KEY = '\$2b\$10\$galeah_wedding_shared_key';
+        const WEDDING_DATE = new Date(2027, 2, 13);
+        let allTasks = {};
+        let editingKey = null;
+        async function loadTasks() {
+            try {
+                const res = await fetch(JSONBIN_URL, { headers: { 'X-Access-Key': JSONBIN_KEY } });
+                if (res.ok) { allTasks = (await res.json()).record || {}; document.getElementById('status').textContent = 'متزامن ✓'; document.getElementById('status').style.background = '#4caf50'; } else { document.getElementById('status').textContent = 'خطأ'; document.getElementById('status').style.background = '#f44336'; }
+            } catch (e) { document.getElementById('status').textContent = 'لا توجد اتصال'; document.getElementById('status').style.background = '#ff9800'; }
+            displayTasks();
+        }
+        async function saveTasks() {
+            document.getElementById('status').textContent = 'جاري الحفظ...';
+            document.getElementById('status').style.background = '#ff9800';
+            try {
+                const res = await fetch(JSONBIN_URL, { method: 'PUT', headers: { 'X-Access-Key': JSONBIN_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(allTasks) });
+                if (res.ok) { document.getElementById('status').textContent = 'متزامن ✓'; document.getElementById('status').style.background = '#4caf50'; await loadTasks(); }
+            } catch (e) { document.getElementById('status').textContent = 'خطأ'; document.getElementById('status').style.background = '#f44336'; }
+        }
+        function updateCountdown() {
+            const today = new Date(); today.setHours(0, 0, 0, 0);
+            const weddingDate = new Date(WEDDING_DATE); weddingDate.setHours(0, 0, 0, 0);
+            const daysLeft = Math.ceil((weddingDate - today) / (1000 * 60 * 60 * 24));
+            document.getElementById('days-remaining').textContent = Math.max(0, daysLeft);
+        }
+        function displayTasks() {
+            const container = document.getElementById('tasks-container');
+            const tasksArray = Object.entries(allTasks).map(([id, task]) => ({ id, ...task }));
+            if (tasksArray.length === 0) {
+                container.innerHTML = '<div class="empty-message">لا توجد مهام حتى الآن</div>';
+            } else {
+                container.innerHTML = tasksArray.map((task) => `<div class="task-item"><span class="task-type">${task.type}</span><div class="task-name">${task.name}</div><div class="task-details"><div><span class="detail-label">💰 السعر:</span> ${task.price || '0'} ريال</div><div><span class="detail-label">🏦 العربون:</span> ${task.deposit || '0'} ريال</div><div style="grid-column: 1 / -1;"><span class="detail-label">👤 المسؤول:</span> ${task.person}</div></div><div class="task-buttons"><button class="btn-edit" onclick="openEditModal('${task.id}')">✏️ تعديل</button><button class="btn-delete" onclick="deleteTask('${task.id}')">حذف</button></div></div>`).join('');
+            }
+            updateStats();
+        }
+        function updateStats() {
+            const tasksArray = Object.values(allTasks);
+            const totalTasks = tasksArray.length;
+            const totalPrice = tasksArray.reduce((sum, t) => sum + (parseFloat(t.price) || 0), 0);
+            const totalDeposit = tasksArray.reduce((sum, t) => sum + (parseFloat(t.deposit) || 0), 0);
+            const remaining = totalPrice - totalDeposit;
+            document.getElementById('total-tasks').textContent = totalTasks;
+            document.getElementById('total-price').textContent = totalPrice.toFixed(0) + ' ريال';
+            document.getElementById('total-deposit').textContent = totalDeposit.toFixed(0) + ' ريال';
+            document.getElementById('remaining-payment').textContent = Math.max(0, remaining).toFixed(0) + ' ريال';
+        }
+        window.openEditModal = function(taskKey) { editingKey = taskKey; const task = allTasks[taskKey]; document.getElementById('edit-type').value = task.type; document.getElementById('edit-name').value = task.name; document.getElementById('edit-price').value = task.price || ''; document.getElementById('edit-deposit').value = task.deposit || ''; document.getElementById('edit-person').value = task.person; document.getElementById('edit-modal').classList.add('active'); };
+        window.closeEditModal = function() { document.getElementById('edit-modal').classList.remove('active'); editingKey = null; };
+        document.getElementById('edit-form').addEventListener('submit', async (e) => { e.preventDefault(); if (editingKey) { allTasks[editingKey] = { type: document.getElementById('edit-type').value, name: document.getElementById('edit-name').value, price: document.getElementById('edit-price').value, deposit: document.getElementById('edit-deposit').value, person: document.getElementById('edit-person').value }; await saveTasks(); closeEditModal(); } });
+        window.deleteTask = async function(taskKey) { if (confirm('حذف المهمة؟')) { delete allTasks[taskKey]; await saveTasks(); } };
+        document.getElementById('task-form').addEventListener('submit', async (e) => { e.preventDefault(); const newKey = 'task_' + Date.now(); allTasks[newKey] = { type: document.getElementById('task-type').value, name: document.getElementById('task-name').value, price: document.getElementById('task-price').value, deposit: document.getElementById('task-deposit').value, person: document.getElementById('task-person').value }; await saveTasks(); document.getElementById('task-form').reset(); const msg = document.getElementById('success-msg'); msg.style.display = 'block'; setTimeout(() => msg.style.display = 'none', 2000); });
+        updateCountdown(); loadTasks(); setInterval(updateCountdown, 1000 * 60 * 60); setInterval(loadTasks, 2000);
+    </script>
+</body>
+</html>
