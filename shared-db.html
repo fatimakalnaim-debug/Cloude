@@ -459,72 +459,24 @@
 
     <script>
         const WEDDING_DATE = new Date(2027, 2, 13);
-        let allTasks = {};
-        let editingKey = null;
+        let allTasks = [];
+        let editingIndex = -1;
 
-        const FIREBASE_URL = 'https://wedding-galeah.firebaseio.com/wedding-tasks.json';
+        const STORAGE_KEY = 'wedding_tasks_galeah_2027';
 
-        async function loadTasks() {
+        function loadTasks() {
             try {
-                const response = await fetch(FIREBASE_URL);
-                if (response.ok) {
-                    allTasks = await response.json() || {};
-                    displayTasks();
-                }
+                const stored = localStorage.getItem(STORAGE_KEY);
+                allTasks = stored ? JSON.parse(stored) : [];
             } catch (e) {
-                console.log('خطأ في التحميل من السحابة، يتم استخدام البيانات المحلية');
-                const stored = localStorage.getItem('wedding_tasks_backup');
-                allTasks = stored ? JSON.parse(stored) : {};
-                displayTasks();
+                allTasks = [];
             }
+            displayTasks();
         }
 
-        async function saveTasks() {
-            localStorage.setItem('wedding_tasks_backup', JSON.stringify(allTasks));
-            try {
-                await fetch(FIREBASE_URL, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(allTasks)
-                });
-            } catch (e) {
-                console.log('تحديث السحابة: يتم الحفظ محلياً');
-            }
+        function saveTasks() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(allTasks));
         }
-
-        setInterval(loadTasks, 2000);
-
-        window.openEditModal = function(taskKey) {
-            editingKey = taskKey;
-            const task = allTasks[taskKey];
-            document.getElementById('edit-type').value = task.type;
-            document.getElementById('edit-name').value = task.name;
-            document.getElementById('edit-price').value = task.price || '';
-            document.getElementById('edit-deposit').value = task.deposit || '';
-            document.getElementById('edit-person').value = task.person;
-            document.getElementById('edit-modal').classList.add('active');
-        };
-
-        window.closeEditModal = function() {
-            document.getElementById('edit-modal').classList.remove('active');
-            editingKey = null;
-        };
-
-        document.getElementById('edit-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            if (editingKey) {
-                allTasks[editingKey] = {
-                    type: document.getElementById('edit-type').value,
-                    name: document.getElementById('edit-name').value,
-                    price: document.getElementById('edit-price').value,
-                    deposit: document.getElementById('edit-deposit').value,
-                    person: document.getElementById('edit-person').value
-                };
-                await saveTasks();
-                await loadTasks();
-                closeEditModal();
-            }
-        });
 
         function updateCountdown() {
             const today = new Date();
@@ -538,12 +490,11 @@
 
         function displayTasks() {
             const container = document.getElementById('tasks-container');
-            const tasksArray = Object.entries(allTasks).map(([id, task]) => ({ id, ...task }));
 
-            if (tasksArray.length === 0) {
+            if (allTasks.length === 0) {
                 container.innerHTML = '<div class="empty-message">لا توجد مهام حتى الآن</div>';
             } else {
-                container.innerHTML = tasksArray.map((task) => `
+                container.innerHTML = allTasks.map((task, index) => `
                     <div class="task-item">
                         <span class="task-type">${task.type}</span>
                         <div class="task-name">${task.name}</div>
@@ -553,8 +504,8 @@
                             <div style="grid-column: 1 / -1;"><span class="detail-label">👤 المسؤول:</span> ${task.person}</div>
                         </div>
                         <div class="task-buttons">
-                            <button class="btn-edit" onclick="openEditModal('${task.id}')">✏️ تعديل</button>
-                            <button class="btn-delete" onclick="deleteTask('${task.id}')">حذف</button>
+                            <button class="btn-edit" onclick="openEditModal(${index})">✏️ تعديل</button>
+                            <button class="btn-delete" onclick="deleteTask(${index})">حذف</button>
                         </div>
                     </div>
                 `).join('');
@@ -563,10 +514,9 @@
         }
 
         function updateStats() {
-            const tasksArray = Object.values(allTasks);
-            const totalTasks = tasksArray.length;
-            const totalPrice = tasksArray.reduce((sum, t) => sum + (parseFloat(t.price) || 0), 0);
-            const totalDeposit = tasksArray.reduce((sum, t) => sum + (parseFloat(t.deposit) || 0), 0);
+            const totalTasks = allTasks.length;
+            const totalPrice = allTasks.reduce((sum, t) => sum + (parseFloat(t.price) || 0), 0);
+            const totalDeposit = allTasks.reduce((sum, t) => sum + (parseFloat(t.deposit) || 0), 0);
             const remaining = totalPrice - totalDeposit;
 
             document.getElementById('total-tasks').textContent = totalTasks;
@@ -575,32 +525,63 @@
             document.getElementById('remaining-payment').textContent = Math.max(0, remaining).toFixed(0) + ' ريال';
         }
 
-        window.deleteTask = async function(taskKey) {
+        window.openEditModal = function(index) {
+            editingIndex = index;
+            const task = allTasks[index];
+            document.getElementById('edit-type').value = task.type;
+            document.getElementById('edit-name').value = task.name;
+            document.getElementById('edit-price').value = task.price || '';
+            document.getElementById('edit-deposit').value = task.deposit || '';
+            document.getElementById('edit-person').value = task.person;
+            document.getElementById('edit-modal').classList.add('active');
+        };
+
+        window.closeEditModal = function() {
+            document.getElementById('edit-modal').classList.remove('active');
+            editingIndex = -1;
+        };
+
+        document.getElementById('edit-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (editingIndex >= 0) {
+                allTasks[editingIndex] = {
+                    type: document.getElementById('edit-type').value,
+                    name: document.getElementById('edit-name').value,
+                    price: document.getElementById('edit-price').value,
+                    deposit: document.getElementById('edit-deposit').value,
+                    person: document.getElementById('edit-person').value
+                };
+                saveTasks();
+                displayTasks();
+                closeEditModal();
+            }
+        });
+
+        window.deleteTask = function(index) {
             if (confirm('حذف المهمة؟')) {
-                delete allTasks[taskKey];
-                await saveTasks();
-                await loadTasks();
+                allTasks.splice(index, 1);
+                saveTasks();
+                displayTasks();
             }
         };
 
-        document.getElementById('task-form').addEventListener('submit', async (e) => {
+        document.getElementById('task-form').addEventListener('submit', (e) => {
             e.preventDefault();
-            const newKey = 'task_' + Date.now();
-            allTasks[newKey] = {
+            allTasks.push({
                 type: document.getElementById('task-type').value,
                 name: document.getElementById('task-name').value,
                 price: document.getElementById('task-price').value,
                 deposit: document.getElementById('task-deposit').value,
-                person: document.getElementById('task-person').value,
-                timestamp: new Date().toISOString()
-            };
-            await saveTasks();
-            await loadTasks();
+                person: document.getElementById('task-person').value
+            });
+            saveTasks();
             document.getElementById('task-form').reset();
 
             const msg = document.getElementById('success-msg');
             msg.style.display = 'block';
             setTimeout(() => msg.style.display = 'none', 2000);
+
+            displayTasks();
         });
 
         updateCountdown();

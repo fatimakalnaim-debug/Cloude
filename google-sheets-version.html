@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحضيرات زفاف غاليه - 13 مارس 2027</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Arial';
+            background: linear-gradient(135deg, #fff5f9 0%, #ffe4f0 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #e84b8a;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .countdown {
+            font-size: 1.8em;
+            color: #ff69b4;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        .wedding-date {
+            color: #999;
+            font-size: 1.1em;
+            margin-top: 10px;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h2 {
+            color: #e84b8a;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #333;
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 0.95em;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ffe4f0;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: inherit;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #ff69b4;
+            box-shadow: 0 0 0 3px rgba(255, 105, 180, 0.1);
+        }
+
+        .btn-add {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #ff69b4 0%, #ff1493 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-add:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 105, 180, 0.3);
+        }
+
+        .btn-add:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .tasks-list {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .task-item {
+            background: #fff0f5;
+            border-right: 4px solid #ff69b4;
+            padding: 15px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .task-type {
+            display: inline-block;
+            background: #ff69b4;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .task-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 8px 0;
+            font-size: 0.9em;
+        }
+
+        .detail-label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .task-name {
+            color: #333;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .task-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .btn-edit {
+            background: #4a90e2;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.85em;
+        }
+
+        .btn-edit:hover {
+            background: #357abd;
+        }
+
+        .btn-delete {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.85em;
+        }
+
+        .btn-delete:hover {
+            background: #ff5252;
+        }
+
+        .stats {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .stats h2 {
+            color: #e84b8a;
+            margin-bottom: 20px;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #ffe4f0;
+            font-size: 1.05em;
+        }
+
+        .stat-row:last-child {
+            border-bottom: none;
+        }
+
+        .stat-label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .stat-value {
+            color: #ff69b4;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .empty-message {
+            text-align: center;
+            color: #999;
+            padding: 20px;
+        }
+
+        .loading {
+            text-align: center;
+            color: #ff69b4;
+            padding: 20px;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #fff0f5 0%, #ffe4f0 100%);
+            border: 2px solid #ff69b4;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            color: #333;
+            font-size: 0.95em;
+        }
+
+        .success-msg {
+            background: #d4edda;
+            color: #155724;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: none;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            font-size: 1.5em;
+            color: #e84b8a;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            justify-content: flex-end;
+        }
+
+        .btn-save {
+            background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn-cancel {
+            background: #999;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .setup-notice {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            color: #856404;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✨ تحضيرات زفاف غاليه ✨</h1>
+            <div class="countdown">
+                <span id="days-remaining">0</span> يوم
+            </div>
+            <div class="countdown-label">متبقي على الزفاف</div>
+            <div class="wedding-date">📅 الجمعة 13 مارس 2027</div>
+        </div>
+
+        <div class="content">
+            <div class="card">
+                <h2>📝 إضافة مهمة جديدة</h2>
+
+                <div class="info-box">
+                    ✨ <strong>مشترك للعائلة كاملة!</strong><br>
+                    كل التحديثات تظهر فوراً للجميع
+                </div>
+
+                <div class="setup-notice" id="setup-notice">
+                    ⚠️ تنبيه: اضغطي على زر "ساعديني" في البداية لتوصيل قاعدة البيانات
+                </div>
+
+                <div class="success-msg" id="success-msg">✓ تمت الإضافة بنجاح!</div>
+
+                <form id="task-form">
+                    <div class="form-group">
+                        <label for="task-type">نوع المهمة *</label>
+                        <input type="text" id="task-type" placeholder="مثال: حجز الصبابة" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="task-name">التفاصيل *</label>
+                        <input type="text" id="task-name" placeholder="مثال: استوديو براق" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="task-price">السعر (ريال)</label>
+                        <input type="number" id="task-price" placeholder="0" step="0.01">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="task-deposit">العربون (ريال)</label>
+                        <input type="number" id="task-deposit" placeholder="0" step="0.01">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="task-person">اسم المسؤول *</label>
+                        <input type="text" id="task-person" placeholder="من المسؤول؟" required>
+                    </div>
+
+                    <button type="submit" class="btn-add" id="submit-btn">➕ إضافة المهمة</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h2>📋 قائمة المهام</h2>
+                <div id="tasks-container" class="tasks-list">
+                    <div class="loading">جاري التحميل...</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats">
+            <h2>📊 ملخص الميزانية</h2>
+            <div class="stat-row">
+                <span class="stat-label">إجمالي المهام:</span>
+                <span class="stat-value" id="total-tasks">0</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">إجمالي التكاليف:</span>
+                <span class="stat-value" id="total-price">0 ريال</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">إجمالي العربون:</span>
+                <span class="stat-value" id="total-deposit">0 ريال</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">المتبقي للدفع:</span>
+                <span class="stat-value" id="remaining-payment">0 ريال</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">✏️ تعديل المهمة</div>
+            <form id="edit-form">
+                <div class="form-group">
+                    <label for="edit-type">نوع المهمة *</label>
+                    <input type="text" id="edit-type" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="edit-name">التفاصيل *</label>
+                    <input type="text" id="edit-name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="edit-price">السعر (ريال)</label>
+                    <input type="number" id="edit-price" step="0.01">
+                </div>
+
+                <div class="form-group">
+                    <label for="edit-deposit">العربون (ريال)</label>
+                    <input type="number" id="edit-deposit" step="0.01">
+                </div>
+
+                <div class="form-group">
+                    <label for="edit-person">اسم المسؤول *</label>
+                    <input type="text" id="edit-person" required>
+                </div>
+
+                <div class="modal-buttons">
+                    <button type="button" class="btn-cancel" onclick="closeEditModal()">إلغاء</button>
+                    <button type="submit" class="btn-save">💾 حفظ التعديل</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const WEDDING_DATE = new Date(2027, 2, 13);
+        let allTasks = [];
+        let editingIndex = -1;
+        let GOOGLE_SCRIPT_URL = localStorage.getItem('google_script_url');
+
+        const STORAGE_KEY = 'wedding_tasks_galeah_2027';
+
+        async function loadTasks() {
+            try {
+                if (GOOGLE_SCRIPT_URL) {
+                    const response = await fetch(GOOGLE_SCRIPT_URL);
+                    allTasks = Object.values(await response.json());
+                    displayTasks();
+                    return;
+                }
+            } catch (e) {
+                console.log('استخدام البيانات المحلية');
+            }
+
+            const stored = localStorage.getItem(STORAGE_KEY);
+            allTasks = stored ? JSON.parse(stored) : [];
+            displayTasks();
+        }
+
+        function saveTasks() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(allTasks));
+        }
+
+        function updateCountdown() {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const weddingDate = new Date(WEDDING_DATE);
+            weddingDate.setHours(0, 0, 0, 0);
+
+            const daysLeft = Math.ceil((weddingDate - today) / (1000 * 60 * 60 * 24));
+            document.getElementById('days-remaining').textContent = Math.max(0, daysLeft);
+        }
+
+        function displayTasks() {
+            const container = document.getElementById('tasks-container');
+
+            if (allTasks.length === 0) {
+                container.innerHTML = '<div class="empty-message">لا توجد مهام حتى الآن</div>';
+            } else {
+                container.innerHTML = allTasks.map((task, index) => `
+                    <div class="task-item">
+                        <span class="task-type">${task.type}</span>
+                        <div class="task-name">${task.name}</div>
+                        <div class="task-details">
+                            <div><span class="detail-label">💰 السعر:</span> ${task.price || '0'} ريال</div>
+                            <div><span class="detail-label">🏦 العربون:</span> ${task.deposit || '0'} ريال</div>
+                            <div style="grid-column: 1 / -1;"><span class="detail-label">👤 المسؤول:</span> ${task.person}</div>
+                        </div>
+                        <div class="task-buttons">
+                            <button class="btn-edit" onclick="openEditModal(${index})">✏️ تعديل</button>
+                            <button class="btn-delete" onclick="deleteTask(${index})">حذف</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            updateStats();
+        }
+
+        function updateStats() {
+            const totalTasks = allTasks.length;
+            const totalPrice = allTasks.reduce((sum, t) => sum + (parseFloat(t.price) || 0), 0);
+            const totalDeposit = allTasks.reduce((sum, t) => sum + (parseFloat(t.deposit) || 0), 0);
+            const remaining = totalPrice - totalDeposit;
+
+            document.getElementById('total-tasks').textContent = totalTasks;
+            document.getElementById('total-price').textContent = totalPrice.toFixed(0) + ' ريال';
+            document.getElementById('total-deposit').textContent = totalDeposit.toFixed(0) + ' ريال';
+            document.getElementById('remaining-payment').textContent = Math.max(0, remaining).toFixed(0) + ' ريال';
+        }
+
+        window.openEditModal = function(index) {
+            editingIndex = index;
+            const task = allTasks[index];
+            document.getElementById('edit-type').value = task.type;
+            document.getElementById('edit-name').value = task.name;
+            document.getElementById('edit-price').value = task.price || '';
+            document.getElementById('edit-deposit').value = task.deposit || '';
+            document.getElementById('edit-person').value = task.person;
+            document.getElementById('edit-modal').classList.add('active');
+        };
+
+        window.closeEditModal = function() {
+            document.getElementById('edit-modal').classList.remove('active');
+            editingIndex = -1;
+        };
+
+        document.getElementById('edit-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (editingIndex >= 0) {
+                allTasks[editingIndex] = {
+                    type: document.getElementById('edit-type').value,
+                    name: document.getElementById('edit-name').value,
+                    price: document.getElementById('edit-price').value,
+                    deposit: document.getElementById('edit-deposit').value,
+                    person: document.getElementById('edit-person').value
+                };
+                saveTasks();
+                displayTasks();
+                closeEditModal();
+            }
+        });
+
+        window.deleteTask = function(index) {
+            if (confirm('حذف المهمة؟')) {
+                allTasks.splice(index, 1);
+                saveTasks();
+                displayTasks();
+            }
+        };
+
+        document.getElementById('task-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            allTasks.push({
+                type: document.getElementById('task-type').value,
+                name: document.getElementById('task-name').value,
+                price: document.getElementById('task-price').value,
+                deposit: document.getElementById('task-deposit').value,
+                person: document.getElementById('task-person').value
+            });
+            saveTasks();
+            document.getElementById('task-form').reset();
+
+            const msg = document.getElementById('success-msg');
+            msg.style.display = 'block';
+            setTimeout(() => msg.style.display = 'none', 2000);
+
+            displayTasks();
+        });
+
+        updateCountdown();
+        loadTasks();
+        setInterval(updateCountdown, 1000 * 60 * 60);
+        setInterval(loadTasks, 3000);
+    </script>
+</body>
+</html>
