@@ -177,15 +177,32 @@
             margin-bottom: 8px;
         }
 
-        .btn-delete {
-            background: #ff6b6b;
+        .task-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .btn-edit, .btn-delete {
             color: white;
             border: none;
             padding: 6px 12px;
             border-radius: 5px;
             cursor: pointer;
             font-size: 0.85em;
-            margin-top: 10px;
+            flex: 1;
+        }
+
+        .btn-edit {
+            background: #4CAF50;
+        }
+
+        .btn-edit:hover {
+            background: #45a049;
+        }
+
+        .btn-delete {
+            background: #ff6b6b;
         }
 
         .btn-delete:hover {
@@ -257,6 +274,74 @@
             border-radius: 5px;
             margin-bottom: 10px;
             display: none;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-content h3 {
+            color: #e84b8a;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-save, .btn-cancel {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-save {
+            background: linear-gradient(135deg, #ff69b4 0%, #ff1493 100%);
+            color: white;
+        }
+
+        .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 105, 180, 0.3);
+        }
+
+        .btn-cancel {
+            background: #999;
+            color: white;
+        }
+
+        .btn-cancel:hover {
+            background: #777;
         }
     </style>
 </head>
@@ -341,11 +426,45 @@
         </div>
     </div>
 
+    <!-- Edit Modal -->
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <h3>تعديل المهمة</h3>
+            <form id="edit-form">
+                <div class="form-group">
+                    <label for="edit-type">نوع المهمة</label>
+                    <input type="text" id="edit-type" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-name">التفاصيل</label>
+                    <input type="text" id="edit-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-price">السعر</label>
+                    <input type="number" id="edit-price" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label for="edit-deposit">العربون</label>
+                    <input type="number" id="edit-deposit" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label for="edit-person">اسم المسؤول</label>
+                    <input type="text" id="edit-person" required>
+                </div>
+                <div class="modal-buttons">
+                    <button type="submit" class="btn-save">💾 حفظ التعديل</button>
+                    <button type="button" class="btn-cancel" onclick="closeEditModal()">إلغاء</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
         const WEDDING_DATE = new Date(2027, 2, 13);
         const API_URL = 'https://jsonbin.io/v3/b/673d4e5caad6cb34f866f5c0';
         const API_KEY = '$2a$10$xxxxxxxxxxxxxxxxxxxxxxxxxxx';
         let allTasks = [];
+        let editingIndex = -1;
 
         function updateCountdown() {
             const today = new Date();
@@ -368,7 +487,6 @@
                     allTasks = [];
                 }
             } catch (e) {
-                console.log('Loading from backup...');
                 const stored = localStorage.getItem('wedding_tasks_backup');
                 allTasks = stored ? JSON.parse(stored) : [];
             }
@@ -387,7 +505,7 @@
                     body: JSON.stringify({ tasks: allTasks })
                 });
             } catch (e) {
-                console.log('Save to cloud failed, using backup');
+                console.log('Save to cloud failed');
             }
         }
 
@@ -405,7 +523,10 @@
                             <div><span class="detail-label">🏦 العربون:</span> ${task.deposit || '0'} ريال</div>
                             <div style="grid-column: 1 / -1;"><span class="detail-label">👤 المسؤول:</span> ${task.person}</div>
                         </div>
-                        <button class="btn-delete" onclick="deleteTask(${index})">حذف</button>
+                        <div class="task-buttons">
+                            <button class="btn-edit" onclick="openEditModal(${index})">✏️ تعديل</button>
+                            <button class="btn-delete" onclick="deleteTask(${index})">🗑️ حذف</button>
+                        </div>
                     </div>
                 `).join('');
             }
@@ -424,10 +545,42 @@
             document.getElementById('remaining-payment').textContent = Math.max(0, remaining).toFixed(0) + ' ريال';
         }
 
-        window.deleteTask = function(index) {
+        function openEditModal(index) {
+            editingIndex = index;
+            const task = allTasks[index];
+            document.getElementById('edit-type').value = task.type;
+            document.getElementById('edit-name').value = task.name;
+            document.getElementById('edit-price').value = task.price || '';
+            document.getElementById('edit-deposit').value = task.deposit || '';
+            document.getElementById('edit-person').value = task.person;
+            document.getElementById('edit-modal').classList.add('active');
+        }
+
+        function closeEditModal() {
+            document.getElementById('edit-modal').classList.remove('active');
+            editingIndex = -1;
+        }
+
+        document.getElementById('edit-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (editingIndex >= 0) {
+                allTasks[editingIndex] = {
+                    type: document.getElementById('edit-type').value,
+                    name: document.getElementById('edit-name').value,
+                    price: document.getElementById('edit-price').value,
+                    deposit: document.getElementById('edit-deposit').value,
+                    person: document.getElementById('edit-person').value
+                };
+                await saveTasks();
+                closeEditModal();
+                displayTasks();
+            }
+        });
+
+        window.deleteTask = async function(index) {
             if (confirm('حذف المهمة؟')) {
                 allTasks.splice(index, 1);
-                saveTasks();
+                await saveTasks();
                 displayTasks();
             }
         };
